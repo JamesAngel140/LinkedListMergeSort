@@ -117,16 +117,19 @@ public class Node<T extends Comparable<? super T>> {
         Queue<Node<T>> SemiSorted = new LinkedList<Node<T>>();
 
         Node start = this;
-        Node end = null;
+        Node end = this;
+
 
         for (Node<T> n = tail; n != null; n = n.tail) {
-            if (n.head.compareTo(n.tail.head) < 0) {
-                end = tail;
+            System.out.println(n.head.compareTo(n.tail.head));
+            System.out.println(n.head);
+            System.out.println(n.tail.head);
+            if (n.head.compareTo(n.tail.head) > 0) {
+                end = n.tail;
             } else {
-                Node holder = end;
-                end.tail = null;
+                end.tail=null;
                 SemiSorted.add(start);
-                start = holder;
+                start = n;
             }
 
         }
