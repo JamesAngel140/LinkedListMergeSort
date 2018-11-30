@@ -27,6 +27,7 @@ public class Node<T extends Comparable<? super T>> {
 
         start = start.mergeSort();
         System.out.println(start.toString());
+        System.out.println(start.isSorted());
 
 
     }
@@ -76,44 +77,45 @@ public class Node<T extends Comparable<? super T>> {
     }
 
     public Queue<Node<T>> queueSortedSegments() {
-        Queue<Node<T>> SemiSorted = new LinkedList<Node<T>>();
+        Queue<Node<T>> SemiSorted = new LinkedList<Node<T>>(); //to return
 
-        Node<T> Clone = new Node<T>(this.head, this.tail);
-        Node start = Clone;
+        Node<T> Clone = new Node<T>(this.head, this.tail); //clone so i dont edit actual lists
+        Node start = Clone; //pointers
         Node end = Clone;
 
 
-        for (Node<T> n = Clone; n != null; n = n.tail) {
-            if (n.tail != null) {
+        for (Node<T> n = Clone; n != null; n = n.tail) //loop through list
+             {
+            if (n.tail != null) //to catch null point errors
+            {
 
-                T Compare1 = n.head;
+                T Compare1 = n.head; //variables to compare
                 T Compare2 = n.tail.head;
 
-                if (Compare1.compareTo(Compare2) <= 0) {
-                    end = n.tail;
+                if (Compare1.compareTo(Compare2) <= 0) //if the next item in the list is greater then
+                {
+                    end = n.tail; //update the pointers
                 } else {
-                    Node<T> holder = new Node(end.head, end.tail);
-                    end.tail = null;
-                    SemiSorted.add(start);
-                    start = holder.tail;
+                    Node<T> holder = new Node(end.head, end.tail); //used to store the rest of the list not being added
+                    end.tail = null; //remove the bits not being added
+                    SemiSorted.add(start); //add the sorted linked list
+                    start = holder.tail; //update the pointers so we are ready to iterate again
                     end = holder.tail;
                     n = holder;
                 }
             } else {
-                SemiSorted.add(start);
+                SemiSorted.add(start); //if there is no more to add, put the last bit in the queue
             }
         }
-
-        //this method should create a queue (of linked lists),
-        //split the original (this) list into its sorted non-empty sublists;
-        //place those sublists in the queue and return it
-        return SemiSorted; //keep compiler happy
+        return SemiSorted;
     }
 
 
     public boolean isSorted() {
-        for (Node<T> n = tail; n.tail != null; n = n.tail) {
-            if (n.head.compareTo(n.tail.head) < 0) {
+        for (Node<T> n = tail; n.tail != null; n = n.tail) //loop through list
+        {
+            if (n.head.compareTo(n.tail.head) > 0) //if the next item in the list less then current return false.
+            {
                 return false;
             }
         }
@@ -122,41 +124,65 @@ public class Node<T extends Comparable<? super T>> {
 
     public Node<T> merge(Node<T> another) {
 
+
+        if(another == null)
+        {
+            return this;
+        }
         Node item1 = this;
         Node item2 = another;
-        Node result = new Node(0, null);
+        Node result;
 
-        while (item1.tail != null && item2.tail != null) {
-            if(item1.head != null && item2.head != null) {
-                if (item1.head.compareTo(item2.head) <= 0) {
-                    Node holder = new Node(item1.head, item1.tail);
-                    item1.tail = null;
-                    result.add(item1);
-                    item1 = holder.tail;
-                } else if (item1.head.compareTo(item2.head) > 0) {
-                    Node holder = new Node(item2.head, item2.tail);
-                    item2.tail = null;
-                    result.add(item2);
-                    item2 = holder.tail;
-
-                }
+        if(item1.head.compareTo(item2.head) <= 0)
+        {
+            if(item1.tail == null)
+            {
+                item1.tail=item2;
+                return item1;
             }
-            else {
-                if (item1.head.compareTo(item2.head) <= 0) {
-                    result.add(item1);
-                    result.add(item2);
-                    break;
-                }
-                else
-                {
-                    result.add(item2);
-                    result.add(item1);
-                    break;
-                }
+            result = item1;
+            result.tail=item1.tail.merge(item2);
+        }
+        else
+        {
+            if(item2.tail == null)
+            {
+                item2.tail=item1;
+                return item2;
             }
+            result = item2;
+            result.tail=item2.tail.merge(item1);
         }
 
 
+//        if(another == null)
+//        {
+//            return this;
+//        }
+//        Node item1 = this;
+//        Node item2 = another;
+//        Node result = new Node(null, null);
+//
+//        if(item1.head.compareTo(item2.head) <= 0)
+//        {
+//            if(item1.tail == null)
+//            {
+//                item1.tail=item2;
+//                return item1;
+//            }
+//            result.tail = item1;
+//            result.tail.tail=item1.tail.merge(item2);
+//        }
+//        else
+//        {
+//            if(item2.tail == null)
+//            {
+//                item2.tail=item1;
+//                return item2;
+//            }
+//            result.tail = item2;
+//            result.tail.tail=item2.tail.merge(item1);
+//        }
         /*
         this method should merge two sorted linked lists
         and return their merged resulting list
