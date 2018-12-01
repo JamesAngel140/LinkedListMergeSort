@@ -20,16 +20,7 @@ public class Node<T extends Comparable<? super T>> {
     }
 
     public static void main(String args[]) {
-        Node start = new Node<>(0, randomList(10));
-
-        System.out.println(start.toString());
-
-
-        start = start.mergeSort();
-        System.out.println(start.toString());
-        System.out.println(start.isSorted());
-
-
+    test(100);
     }
 
 
@@ -55,6 +46,17 @@ public class Node<T extends Comparable<? super T>> {
         //4. sort the list using mergeSort
         //5. output the sorted list
         //6. report whether the 'isSorted' method thinks that list is sorted or not
+        Node start = new Node<>(0, randomList(n));
+
+        System.out.println(start.toString());
+        System.out.println(start.isSorted());
+
+        start = start.mergeSort();
+        System.out.println(start.toString());
+        System.out.println(start.isSorted());
+
+
+
     }
 
     public String toString() {
@@ -208,7 +210,7 @@ public class Node<T extends Comparable<? super T>> {
             Node item1 = items.remove();
             Node item2 = items.remove();
 
-            item1.merge(item2);
+            item1=item1.merge(item2);
             items.add(item1);
 
         }
