@@ -127,10 +127,7 @@ public class Node<T extends Comparable<? super T>> {
     public Node<T> merge(Node<T> another) {
 
 
-        if(another == null)
-        {
-            return this;
-        }
+
         Node item1 = this;
         Node item2 = another;
         Node result;
